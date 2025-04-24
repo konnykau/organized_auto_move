@@ -1,0 +1,16 @@
+<launch>
+
+  <node pkg="joy" exec="joy_node" name="joy_node">
+  </node>
+
+  <node pkg="undercarriage" exec="undercarriage" name="undercarriage">
+  </node>
+
+  <!-- <node pkg="upper" exec="upper" name="upper">
+  </node> -->
+
+  
+  <include file="$(find-pkg-share robomas_plugins)/launch/robomas_bridge_launch.xml"/>
+  <!-- <include file="$(find-pkg-share robomas_second_plugins)/launch/robomas_second_bridge_launch.xml"/> -->
+
+</launch>
