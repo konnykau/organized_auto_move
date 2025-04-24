@@ -6,7 +6,7 @@
 #include "robomas_plugins/msg/robomas_frame.hpp"
 #include "robomas_plugins/msg/robomas_target.hpp"
 #include "robomas_plugins/msg/frame.hpp"
-#include "controllernode/msg/autotarget.hpp"
+// #include "controllernode/msg/autotarget.hpp"
 
 using std::placeholders::_1;
 enum class robot_mode
@@ -22,8 +22,8 @@ public:
   {
     joy_subscription_ = this->create_subscription<sensor_msgs::msg::Joy>(
       "joy", 10, std::bind(&Undercarriage_Node::joy_callback, this, _1));
-      auto_move_subscription_ = this->create_subscription<controllernode::msg::Autotarget>(
-      "/auto_target", 10, std::bind(&Undercarriage_Node::auto_move_callback, this));
+      // auto_move_subscription_ = this->create_subscription<controllernode::msg::Autotarget>(
+      // "/auto_target", 10, std::bind(&Undercarriage_Node::auto_move_callback, this));
       setting_frame_publisher_ = this->create_publisher<robomas_plugins::msg::RobomasFrame>("robomas_frame", 10);
       motors.push_back({
         Motor(1.0, 0.0, 0,this->now()),
@@ -78,17 +78,17 @@ private:
     }
   }
 
-  void auto_move_callback(const controllernode::msg::Autotarget &msg){
-    if(this_robot_mode == robot_mode::automode){
-      target_vector.x = msg.x;
-      target_vector.y = msg.y;
-      for(auto& one_motor : motors){
-        robomas_plugins::msg::RobomasTarget target_msg;
-        target_msg.target  = one_motor.first.update(target_vector * one_motor.first.get_vec2d() * Constants::Undercarriage::ROBOT_VELOCITY, this->now());
-        one_motor.second->publish(target_msg);
-      }
-    }
-  }
+  // void auto_move_callback(const controllernode::msg::Autotarget &msg){
+  //   if(this_robot_mode == robot_mode::automode){
+  //     target_vector.x = msg.x;
+  //     target_vector.y = msg.y;
+  //     for(auto& one_motor : motors){
+  //       robomas_plugins::msg::RobomasTarget target_msg;
+  //       target_msg.target  = one_motor.first.update(target_vector * one_motor.first.get_vec2d() * Constants::Undercarriage::ROBOT_VELOCITY, this->now());
+  //       one_motor.second->publish(target_msg);
+  //     }
+  //   }
+  // }
   robomas_plugins::msg::RobomasFrame  make_setting_frame(uint8_t motor_number,bool MODE ){
     robomas_plugins::msg::RobomasFrame undercarriage_frame;
     undercarriage_frame.motor = motor_number;
@@ -106,7 +106,7 @@ private:
 
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_subscription_;
   rclcpp::Publisher<robomas_plugins::msg::RobomasFrame>::SharedPtr setting_frame_publisher_;
-  rclcpp::Subscription<controllernode::msg::Autotarget>::SharedPtr auto_move_subscription_;
+  // rclcpp::Subscription<controllernode::msg::Autotarget>::SharedPtr auto_move_subscription_;
   std::vector<std::pair<Motor,rclcpp::Publisher<robomas_plugins::msg::RobomasTarget>::SharedPtr>> motors;
   // bool robot_mode = false;
   robot_mode this_robot_mode = robot_mode::disable;

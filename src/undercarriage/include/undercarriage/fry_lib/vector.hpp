@@ -5,7 +5,7 @@ namespace FRY{
         float x;
         float y;
         //ベクトル成分
-        Vec2d(float x,float y):x(x),y(y){}
+        // Vec2d(float x,float y):x(x),y(y){}
         friend auto operator*(const Vec2d a,const Vec2d b) -> float{
             return a.x*b.x+b.y*a.y;
         }//内積
